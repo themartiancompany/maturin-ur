@@ -4,6 +4,7 @@ pkgbase = maturin
 	pkgrel = 1
 	url = https://github.com/PyO3/maturin
 	arch = x86_64
+	arch = arm
 	license = Apache-2.0 OR MIT
 	makedepends = bzip2
 	makedepends = gcc-libs
