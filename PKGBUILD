@@ -110,25 +110,25 @@ package_maturin() {
     rust
   )
   cd \
-    $pkgbase-$pkgver
+    "${pkgbase}-${pkgver}"
   "${_py}" \
     -m installer \
-    --destdir="$pkgdir" \
+    --destdir="${pkgdir}" \
     dist/*.whl
   install \
     -vDm 644 \
     {Changelog,README}.md \
-    -t "$pkgdir/usr/share/doc/$pkgname/"
+    -t "${pkgdir}/usr/share/doc/${pkgname}/"
   install \
     -vDm 644 \
     license-mit \
-    -t "$pkgdir/usr/share/licenses/$pkgname/"
+    -t "${pkgdir}/usr/share/licenses/${pkgname}/"
 
   (
     cd \
-      "$pkgdir"
+      "${pkgdir}"
     _pick \
-      python-$pkgbase \
+      "${_py}-${pkgbase}" \
       usr/lib
   )
 }
@@ -136,19 +136,19 @@ package_maturin() {
 package_python-maturin() {
   pkgdesc+=" - Python bindings"
   depends=(
-    maturin=$pkgver
-    python
+    "${_pkg}=${pkgver}"
+    "${_py}"
   )
   mv \
     -v \
-    $pkgname/* \
-    "$pkgdir"
+    "${pkgname}/"* \
+    "${pkgdir}"
 
   install \
     -vDm 644 \
-    $pkgbase-$pkgver/license-mit \
+    "${pkgbase}-${pkgver}/license-mit" \
     -t \
-    "$pkgdir/usr/share/licenses/$pkgname/"
+    "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
 
 # vim:set sw=2 sts=-1 et:
