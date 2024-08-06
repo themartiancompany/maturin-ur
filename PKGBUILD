@@ -14,7 +14,7 @@ pkgname=(
   "${pkgbase}"
   "${_py}-${_pkg}"
 )
-pkgver=1.4.0
+pkgver=1.5.0
 pkgrel=1
 _pkgdesc=(
   "Build and publish crates with pyo3,"
@@ -25,15 +25,18 @@ url="https://github.com/PyO3/${_pkg}"
 arch=(
   x86_64
   arm
+  armv7l
+  aarch64
+  i686
+  pentium4
+  mips
 )
 license=(
   'Apache-2.0 OR MIT'
 )
 makedepends=(
   bzip2
-  gcc-libs
   git
-  glibc
   "${_py}-build"
   "${_py}-installer"
   "${_py}-setuptools"
@@ -41,6 +44,17 @@ makedepends=(
   "${_py}-wheel"
   rust
 )
+if [[ "${_os}" == 'Android' ]]; then
+  makedepends+=(
+    ndk-sysroot
+  )
+elif [[ "${_os}" == 'GNU/Linux' ]]; then
+  makedepends+=(
+    gcc-libs
+    glibc
+  )
+fi
+
 # disable LTO until ring can be built with it:
 # https://github.com/briansmith/ring/issues/1444
 options=(
@@ -50,10 +64,10 @@ source=(
   $url/archive/v$pkgver/$pkgname-v$pkgver.tar.gz
 )
 sha512sums=(
-  'c86afdeb694c2fe4b9b94a7bf5f657f9337d3b6179a3d430a26608353d4de7c463a3860e87225356cfe66f1111240717851173403c66a8c30ed3acf7c1d2afdb'
+  'fa30ceafae02b72bae772ee0cb99af1394f258ef37574b9a46cec9528615cac896cdf9a0540c5c5a9b0d7500993d8313c1afc24d4b5337c43d0fbcf8203d8048'
 )
 b2sums=(
-  'f7b03ab106b180a6b274ddee112e85197abb7518e5cc741afd653cdecbaad3ceb2225218c8f58ee45d562c168a51b69174505cef9d0b1d69cf3aed981ba7d892'
+  '804198a313aa413c251e4dfd3f399bb9c5826234a9caf1422d770e4becca85b79d237c11c4920b60fee43550d174ffb9b7dfb12036af89fc31e6a36e7e3f317d'
 )
 
 _pick() {
@@ -128,7 +142,7 @@ package_maturin() {
     cd \
       "${pkgdir}"
     _pick \
-      "${_py}-${pkgbase}" \
+      "${_py}-${_pkg}" \
       usr/lib
   )
 }
@@ -141,7 +155,7 @@ package_python-maturin() {
   )
   mv \
     -v \
-    "${pkgname}/"* \
+    "${_py}-${_pkg}/"* \
     "${pkgdir}"
 
   install \
