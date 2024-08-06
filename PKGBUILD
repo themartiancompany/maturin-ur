@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: AGPL-3.0
 #
+# Maintainer:  Pellegrino Prevete (dvorak) <pellegrinoprevete@gmail.com>
+# Maintainer:  Truocolo <truocolo@aol.com>
 # Maintainer:  David Runge <dvzrv@archlinux.org>
-# Contributor: Pellegrino Prevete (dvorak) <pellegrinoprevete@gmail.com>
-# Contributor: Truocolo <truocolo@aol.com>
 
 _os="$( \
   uname \
