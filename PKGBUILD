@@ -50,18 +50,17 @@ if [[ "${_os}" == 'Android' ]]; then
   )
 elif [[ "${_os}" == 'GNU/Linux' ]]; then
   makedepends+=(
-    gcc-libs
     glibc
+    gcc-libs
   )
 fi
-
 # disable LTO until ring can be built with it:
 # https://github.com/briansmith/ring/issues/1444
 options=(
   !lto
 )
 source=(
-  $url/archive/v$pkgver/$pkgname-v$pkgver.tar.gz
+  "${url}/archive/v${pkgver}/${pkgname}-v${pkgver}.tar.gz"
 )
 sha512sums=(
   'fa30ceafae02b72bae772ee0cb99af1394f258ef37574b9a46cec9528615cac896cdf9a0540c5c5a9b0d7500993d8313c1afc24d4b5337c43d0fbcf8203d8048'
@@ -119,10 +118,17 @@ build() {
 package_maturin() {
   depends=(
     bzip2
-    gcc-libs
-    glibc
     rust
   )
+  if [[ "${_os}" == 'Android' ]]; then
+    depends+=(
+      ndk-sysroot
+    )
+  elif [[ "${_os}" == 'GNU/Linux' ]]; then
+    depends+=(
+      glibc
+    )
+  fi
   cd \
     "${pkgbase}-${pkgver}"
   "${_py}" \
