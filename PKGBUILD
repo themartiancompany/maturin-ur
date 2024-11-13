@@ -45,25 +45,14 @@ license=(
   'Apache-2.0 OR MIT'
 )
 makedepends=(
-  bzip2
-  git
+  'bzip2'
   "${_py}-build"
   "${_py}-installer"
   "${_py}-setuptools"
   "${_py}-setuptools-rust"
   "${_py}-wheel"
-  rust
+  'rust'
 )
-if [[ "${_os}" == 'Android' ]]; then
-  makedepends+=(
-    ndk-sysroot
-  )
-elif [[ "${_os}" == 'GNU/Linux' ]]; then
-  makedepends+=(
-    glibc
-    gcc-libs
-  )
-fi
 # disable LTO until ring can be built with it:
 # https://github.com/briansmith/ring/issues/1444
 options=(
@@ -92,7 +81,7 @@ _pick() {
     mv \
       "$f" \
       "$d"
-    rmdir \
+  rmdir \
     -p \
     --ignore-fail-on-non-empty \
     "$( \
@@ -127,8 +116,8 @@ build() {
 
 package_maturin() {
   depends=(
-    bzip2
-    rust
+    'bzip2'
+    'rust'
   )
   if [[ "${_os}" == 'Android' ]]; then
     depends+=(
@@ -165,6 +154,7 @@ package_maturin() {
 
 package_python-maturin() {
   pkgdesc+=" - Python bindings"
+  groups=(python-build-backend)
   depends=(
     "${_pkg}=${pkgver}"
     "${_py}>=${_pymajver}"
@@ -174,7 +164,6 @@ package_python-maturin() {
     -v \
     "${_py}-${_pkg}/"* \
     "${pkgdir}"
-
   install \
     -vDm 644 \
     "${pkgbase}-${pkgver}/license-mit" \
