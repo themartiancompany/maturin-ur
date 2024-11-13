@@ -9,12 +9,22 @@ _os="$( \
     -o)"
 _pkg=maturin
 _py="python"
+_pyver="$( \
+  "${_py}" \
+    -V | \
+    awk \
+      '{print $2}')"
+_pymajver="${_pyver%.*}"
+_pyminver="${_pymajver#*.}"
+_pynextver="${_pymajver%.*}.$(( \
+  ${_pyminver} + 1))"
+_pkg=maturin
 pkgbase="${_pkg}"
 pkgname=(
   "${pkgbase}"
   "${_py}-${_pkg}"
 )
-pkgver=1.5.0
+pkgver=1.7.4
 pkgrel=1
 _pkgdesc=(
   "Build and publish crates with pyo3,"
@@ -63,10 +73,10 @@ source=(
   "${url}/archive/v${pkgver}/${pkgname}-v${pkgver}.tar.gz"
 )
 sha512sums=(
-  'fa30ceafae02b72bae772ee0cb99af1394f258ef37574b9a46cec9528615cac896cdf9a0540c5c5a9b0d7500993d8313c1afc24d4b5337c43d0fbcf8203d8048'
+'72fb43a10d3cdf35eca224232c59723bff5b9230c7d40ff01537e1ba869254b4b6e9a0c52e8b7154f7b74f0f0b5bace4e7bb9ac5257c9fbc04750160791c35e3'
 )
 b2sums=(
-  '804198a313aa413c251e4dfd3f399bb9c5826234a9caf1422d770e4becca85b79d237c11c4920b60fee43550d174ffb9b7dfb12036af89fc31e6a36e7e3f317d'
+  '008b2d67d553479040fcd3062b93ca12dc6f2b98c3d6cb43cac7ff0d8e4772417b99fbf2a73ed96cfcc8a7372b37d845e8485ba0afc80342943a10d716492377'
 )
 
 _pick() {
@@ -122,11 +132,11 @@ package_maturin() {
   )
   if [[ "${_os}" == 'Android' ]]; then
     depends+=(
-      ndk-sysroot
+      'ndk-sysroot'
     )
   elif [[ "${_os}" == 'GNU/Linux' ]]; then
     depends+=(
-      glibc
+      'glibc'
     )
   fi
   cd \
@@ -157,7 +167,8 @@ package_python-maturin() {
   pkgdesc+=" - Python bindings"
   depends=(
     "${_pkg}=${pkgver}"
-    "${_py}"
+    "${_py}>=${_pymajver}"
+    "${_py}<${_pynextver}"
   )
   mv \
     -v \
